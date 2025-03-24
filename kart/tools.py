@@ -1,6 +1,6 @@
 import math
 
-import pandas as pd
+# import pandas as pd
 import serial.tools.list_ports
 
 
@@ -21,15 +21,15 @@ def choose_port():
 
 
 # Read CSV
-def process_data(path: str) -> list[list[float]]:
-    """
-    Open csv file as pandas dataframe and return a list of tuples of the values for each column.
-    """
-    race_info: pd.DataFrame = pd.read_csv(path)
-    race_info.fillna(0, inplace=True)
-    data: list[list[float]] = race_info.values.tolist()
+# def process_data(path: str) -> list[list[float]]:
+#     """
+#     Open csv file as pandas dataframe and return a list of tuples of the values for each column.
+#     """
+#     race_info: pd.DataFrame = pd.read_csv(path)
+#     race_info.fillna(0, inplace=True)
+#     data: list[list[float]] = race_info.values.tolist()
 
-    return data
+#     return data
 
 
 # Others
@@ -41,6 +41,3 @@ def rpm_to_dist(rpm: float, diameter: float, time: float = 1):
 
 def scale(ele: float, min_val: float, max_value: float, a: float, b: float):
     return a + (ele - min_val) * (b - a) / (max_value - min_val)
-
-
-print(scale(10, 0, 100, 0, 0.5))

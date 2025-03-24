@@ -36,9 +36,6 @@
           (result (+ term1 term2 term3)))  ;; Correctly defining `result`
       result)))  ;; Returning `result`
 
-(define deacceleration
-  (lambda ( ) ))
-
 (define get-dvdt
   (lambda (curr-rpm)
     (let ((curr-v (rpm-to-v curr-rpm))
@@ -71,17 +68,30 @@
     ))
 
 (define q (make-list queue-size 0))
+(define print-output "")
+
+(defun print-stats ()
+  (progn
+    (print print-output)
+    (sleep 0.5)
+    (print-stats)
+  )
+)
 
 (print "")
 (print "Start")
 
-(define i 0)
-(loopwhile (< i 5)
+(uart-start 115200)
+(loopwhile t
     (progn
-    (set-rpm 3000)
-    (sleep 1)
-    (define i (+ i 1))
-    ))
+        (uart-write "Hey")
+        (sleep 1)
+    )
+)
+
+; (define arr (array-create 10))
+; (uart-read arr)
+; (print arr)
 
 (defun main ()
     (loopwhile t
@@ -104,12 +114,13 @@
                 (progn
                     (setvar 'q (nq q bf-amps))
                     (set-brake (get-avg q))
-                    (print output)
+                    (setvar 'print-output output)
                 )
             )
         )
         (sleep response-rate)
         )))
 
+(spawn print-stats)
 (main)
 
