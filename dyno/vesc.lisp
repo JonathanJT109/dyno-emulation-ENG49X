@@ -3,10 +3,10 @@
 (define *Gr* (/ 9.0 68)) ; Gearing ratio
 (define *P* 1.0) ; Tire pressure (barr)
 (define *rho* 1.2) ; Air density (kg/m^3)
-(define *m* 136.0) ; Kart mass (kg)
+(define *m* 161.78) ; Kart mass (kg)
 (define *g* 9.8) ; Gravity acceleration constant (m/s^2)
 (define *C_d* 0.8) ; Drag coefficient (unitless)
-(define *A* 0.5) ; Maximum cross-sectional area (m^2)
+(define *A* 0.7) ; Maximum cross-sectional area (m^2)
 (define *mu_s* 0.8) ; Static Friction coefficient
 
 ;; 02 -- User defined variables
@@ -27,7 +27,7 @@
     ))
     
 ;; Append element to the end of the list
-;; Ignore the first element and return a list with the rest of the elements plus the new one.
+;; Description: Ignore the first element and return a list with the rest of the elements plus the new one.
 (define nq
     (lambda (lst ele)
         (append (rest lst) (list ele))))
@@ -57,20 +57,19 @@
     (event-handler)
 )))
 
-;; 05 -- Deacceleration
+;; 05 -- Deceleration
 (define a (* -0.99 *g* *mu_s*))
 (define dec (* a (/ 6 (* *D_t* *Gr*)))) ; rps per second * res
 
 ;; Decrease the RPM linearly
-(define deacceleration
+(define deceleration
     (lambda (rpm)
         (+ rpm dec)
     )
 )
 
-;; TODO: Implement deacceleration function
-
 ;; 06 -- Braking force
+;; RPM to RPS
 (defun rpm-to-rps (rpm)
   (/ rpm 60))
 
@@ -80,6 +79,7 @@
     (* *Gr* rps +pi+ *D_t*)))
 
 ;; Physical forces applied to the kart
+;; Aerodynamic Drag, Rolling resistance, Inertia
 (define braking-force
   (lambda (rpm dvdt)
     (let ((v (rpm-to-v rpm))
@@ -122,7 +122,7 @@
             (if (eq can-flag 0)
                 (let ((rpm (/ (get-rpm) 3.0))
                       (output (str-merge "(TURN) RPM: " (str-from-n rpm)))
-                       (new-rpm (deacceleration rpm))) ; TODO
+                       (new-rpm (deceleration rpm))) ; TODO
                     (progn
                         (if (> new-rpm 0)
                             (set-rpm new-rpm)
@@ -157,5 +157,5 @@
 
 ;; Additional comments
 ;; 1. There is no difference between defun and define variables with lambda functions.
-;; 2. A queue with bigger queue size will give a smoother output, however, the response time will be slower. (Try to keep it as low as possible)
+;; 2. A queue with bigger queue size will give a smoother output, however, the "response time" will be slower. (Try to keep it as low as possible)
 ;; 3. The VESC uses eid in CAN by default. However, the code is written to use sid.

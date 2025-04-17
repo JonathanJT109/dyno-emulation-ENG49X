@@ -3,14 +3,15 @@ from typing import Any
 import matplotlib.pyplot as plt
 import numpy as np
 
-p = 1
-c = 1
-m = 136
+p = 1.0
+c = 0.8
+m = 136.0
 g = 9.8
 a = 0.5
 r = 1.2
 d = 0.254
-gr = 9 / 68
+gr = 9.0 / 68
+
 
 def rpm_to_v(x) -> float:
     return (x / 60) * np.pi * d * gr
@@ -39,7 +40,7 @@ labels = []
 for i in range(x2.shape[0]):
     labels.append(f"RPM: {x2[i]}\nWatts: {y2[i]:.2f}")
 
-plt.figure(figsize=(10, 6))
+plt.figure(figsize=(10, 8))
 plt.plot(x, y, color="red")
 
 plt.xlim(left=0)
@@ -49,8 +50,8 @@ plt.grid(axis="y", linestyle="-", alpha=0.7)
 ax.spines["top"].set_visible(False)
 ax.spines["right"].set_visible(False)
 
-plt.ylabel("Watts", fontsize=14, fontweight="bold")
-plt.xlabel("RPM", fontsize=14, fontweight="bold")
+plt.ylabel("Watts", fontsize=16, fontweight="bold")
+plt.xlabel("RPM", fontsize=16, fontweight="bold")
 
 plt.scatter(x2, y2, color="black", zorder=3)
 
@@ -61,9 +62,9 @@ for i, label in enumerate(labels):
         textcoords="offset points",
         xytext=(0, 10),
         ha="center",
-        fontsize=12,
+        fontsize=16,
         color="black",
-        bbox=dict(facecolor="white", edgecolor="black", boxstyle="round,pad=0.3"),
+        bbox=dict(facecolor="white", edgecolor="black", boxstyle="round,pad=0.7"),
     )
 
 plt.tight_layout()
